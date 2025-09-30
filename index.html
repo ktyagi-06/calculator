@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+  <div class="calculator rounded-2xl p-4 sm:p-6 shadow-2xl w-full max-w-xs sm:max-w-md">
+    <input 
+      type="text" 
+      id="display" 
+      class="w-full h-12 sm:h-16 text-lg sm:text-2xl text-right p-3 sm:p-4 rounded-xl mb-3 sm:mb-4 outline-none" 
+      readonly
+      value="0"
+    >
+
+    <div class="grid grid-cols-4 gap-2 sm:gap-3">
+      <!-- Row 1 -->
+      <button onclick="clearDisplay()" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">C</button>
+      <button onclick="deleteLast()" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-lg">DEL</button>
+      <button onclick="insert('(')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg operator">(</button>
+      <button onclick="insert(')')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg operator">)</button>
+      
+      <!-- Row 2 -->
+      <button onclick="insert('7')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">7</button>
+      <button onclick="insert('8')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">8</button>
+      <button onclick="insert('9')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">9</button>
+      <button onclick="insert('/')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg operator">÷</button>
+      
+      <!-- Row 3 -->
+      <button onclick="insert('4')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">4</button>
+      <button onclick="insert('5')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">5</button>
+      <button onclick="insert('6')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">6</button>
+      <button onclick="insert('*')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg operator">×</button>
+      
+      <!-- Row 4 -->
+      <button onclick="insert('1')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">1</button>
+      <button onclick="insert('2')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">2</button>
+      <button onclick="insert('3')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">3</button>
+      <button onclick="insert('-')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg operator">−</button>
+      
+      <!-- Row 5 -->
+      <button onclick="insert('0')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">0</button>
+      <button onclick="insert('.')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg">.</button>
+      <button onclick="calculate()" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg equals">=</button>
+      <button onclick="insert('+')" class="calc-button h-12 sm:h-14 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg operator">+</button>
+      
+      <!-- Advanced Functions Row 1 -->
+      <button onclick="insertFunction('sin')" class="calc-button h-10 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm function">sin</button>
+      <button onclick="insertFunction('cos')" class="calc-button h-10 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm function">cos</button>
+      <button onclick="insertFunction('tan')" class="calc-button h-10 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm function">tan</button>
+      <button onclick="insertFunction('sqrt')" class="calc-button h-10 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm function">√</button>
+      
+      <!-- Advanced Functions Row 2 -->
+      <button onclick="insertFunction('log')" class="calc-button h-10 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm function">log</button>
+      <button onclick="factorial()" class="calc-button h-10 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm function">n!</button>
+      <button onclick="insertConstant('pi')" class="calc-button h-10 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm function">π</button>
+      <button onclick="insertConstant('e')" class="calc-button h-10 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm function">e</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

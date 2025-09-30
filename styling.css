@@ -1,0 +1,212 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+  animation: floatingBubbles 10s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes floatingBubbles {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.7;
+  }
+  33% {
+    transform: translateY(-30px) rotate(120deg);
+    opacity: 0.9;
+  }
+  66% {
+    transform: translateY(-60px) rotate(240deg);
+    opacity: 0.8;
+  }
+}
+
+.calculator {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.calculator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+#display {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-family: 'Courier New', monospace;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.calc-button {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  transition: all 0.15s ease;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.calc-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.calc-button:hover::before {
+  left: 100%;
+}
+
+.calc-button:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.calc-button:active {
+  transform: translateY(0);
+  transition: all 0.1s ease;
+}
+
+.operator {
+  background: rgba(255, 107, 107, 0.4);
+  border-color: rgba(255, 107, 107, 0.6);
+}
+
+.operator:hover {
+  background: rgba(255, 107, 107, 0.6);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.function {
+  background: rgba(72, 187, 120, 0.4);
+  border-color: rgba(72, 187, 120, 0.6);
+}
+
+.function:hover {
+  background: rgba(72, 187, 120, 0.6);
+  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.equals {
+  background: rgba(56, 178, 172, 0.5);
+  border-color: rgba(56, 178, 172, 0.7);
+}
+
+.equals:hover {
+  background: rgba(56, 178, 172, 0.7);
+  box-shadow: 0 4px 15px rgba(56, 178, 172, 0.4);
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .calculator {
+    max-height: 90vh;
+    overflow: hidden;
+  }
+  
+  .calc-button {
+    min-height: 48px;
+    font-size: 14px;
+  }
+  
+  #display {
+    font-size: 18px;
+  }
+}
+
+.calc-button {
+  will-change: transform;
+}
+
+/* Additional floating elements */
+body::after {
+  content: '';
+  position: fixed;
+  top: 10%;
+  right: 10%;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+  }
+}
