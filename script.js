@@ -1,125 +1,140 @@
-let display = document.getElementById("display");
-let currentInput = "0";
+// script.js
+
+let display = document.getElementById('display');
+let currentInput = '0';
 let shouldResetDisplay = false;
 
 function updateDisplay() {
-  display.value = currentInput;
+  display.value = currentInput;
 }
 
 function insert(value) {
-  if (shouldResetDisplay || currentInput === "0" || currentInput === "Error") {
-    currentInput = "";
-    shouldResetDisplay = false;
-  }
-  currentInput += value;
-  updateDisplay();
+  if (shouldResetDisplay) {
+    currentInput = '';
+    shouldResetDisplay = false;
+  }
+  
+  if (currentInput === '0' && value !== '.') {
+    currentInput = value;
+  } else {
+    currentInput += value;
+  }
+  updateDisplay();
 }
 
 function insertFunction(func) {
-  if (shouldResetDisplay || currentInput === "0" || currentInput === "Error") {
-    currentInput = "";
-    shouldResetDisplay = false;
-  }
-  switch (func) {
-    case "sin": currentInput += "sin("; break;
-    case "cos": currentInput += "cos("; break;
-    case "tan": currentInput += "tan("; break;
-    case "sqrt": currentInput += "sqrt("; break;
-    case "log": currentInput += "log("; break;
-  }
-  updateDisplay();
+  if (shouldResetDisplay) {
+    currentInput = '';
+    shouldResetDisplay = false;
+  }
+  
+  if (currentInput === '0') {
+    currentInput = func + '(';
+  } else {
+    currentInput += func + '(';
+  }
+  updateDisplay();
 }
 
 function insertConstant(constant) {
-  if (shouldResetDisplay || currentInput === "0" || currentInput === "Error") {
-    currentInput = "";
-    shouldResetDisplay = false;
-  }
-  switch (constant) {
-    case "pi": currentInput += Math.PI.toString(); break;
-    case "e": currentInput += Math.E.toString(); break;
-  }
-  updateDisplay();
+  if (shouldResetDisplay) {
+    currentInput = '';
+    shouldResetDisplay = false;
+  }
+  
+  let value = constant === 'pi' ? Math.PI.toString() : Math.E.toString();
+  
+  if (currentInput === '0') {
+    currentInput = value;
+  } else {
+    currentInput += value;
+  }
+  updateDisplay();
 }
 
 function clearDisplay() {
-  currentInput = "0";
-  shouldResetDisplay = false;
-  updateDisplay();
+  currentInput = '0';
+  shouldResetDisplay = false;
+  updateDisplay();
 }
 
 function deleteLast() {
-  if (currentInput.length > 1) {
-    currentInput = currentInput.slice(0, -1);
-  } else {
-    currentInput = "0";
-  }
-  updateDisplay();
+  if (currentInput.length > 1) {
+    currentInput = currentInput.slice(0, -1);
+  } else {
+    currentInput = '0';
+  }
+  updateDisplay();
 }
 
 function calculate() {
-  try {
-    let expression = currentInput
-      .replace(/×/g, "*")
-      .replace(/÷/g, "/")
-      .replace(/−/g, "-")
-      .replace(/sin\(/g, "Math.sin(")
-      .replace(/cos\(/g, "Math.cos(")
-      .replace(/tan\(/g, "Math.tan(")
-      .replace(/sqrt\(/g, "Math.sqrt(")
-      .replace(/log\(/g, "Math.log10(")
-      .replace(/(\d+)\^(\d+)/g, "Math.pow($1,$2)");
+  try {
+    // Replace display symbols with JavaScript operators and Math functions
+    let expression = currentInput
+      .replace(/×/g, '*')
+      .replace(/÷/g, '/')
+      .replace(/−/g, '-')
+      .replace(/\^/g, '**') // Power operator
+      .replace(/sin\(/g, 'Math.sin(')
+      .replace(/cos\(/g, 'Math.cos(')
+      .replace(/tan\(/g, 'Math.tan(')
+      // log() in the calculator is typically base 10 (log10), or natural log (log)
+      // Using Math.log10 for common scientific calculator interpretation
+      .replace(/log\(/g, 'Math.log10(') 
+      .replace(/sqrt\(/g, 'Math.sqrt(');
 
-    let result = eval(expression);
-    if (isNaN(result) || !isFinite(result)) {
-      currentInput = "Error";
-    } else {
-      currentInput = (Math.round(result * 1e9) / 1e9).toString();
-    }
-    shouldResetDisplay = true;
-    updateDisplay();
-  } catch {
-    currentInput = "Error";
-    shouldResetDisplay = true;
-    updateDisplay();
-  }
+    // Note: Using eval() is functional but carries security risks in production. 
+    // For advanced/secure calculators, use a dedicated expression parser.
+    let result = eval(expression);
+    
+    // Handle special cases
+    if (isNaN(result)) {
+      currentInput = 'Error';
+    } else if (!isFinite(result)) {
+      currentInput = 'Infinity';
+    } else {
+      // Round to avoid floating point precision issues (12 significant digits)
+      currentInput = parseFloat(result.toPrecision(12)).toString();
+    }
+    
+    shouldResetDisplay = true;
+    updateDisplay();
+  } catch (error) {
+    currentInput = 'Error';
+    shouldResetDisplay = true;
+    updateDisplay();
+  }
 }
 
-function factorial() {
-  try {
-    let num = parseInt(currentInput);
-    if (isNaN(num) || num < 0 || num > 170) {
-      currentInput = "Error";
-      shouldResetDisplay = true;
-      updateDisplay();
-      return;
-    }
-    let fact = 1;
-    for (let i = 1; i <= num; i++) fact *= i;
-    currentInput = fact.toString();
-    shouldResetDisplay = true;
-    updateDisplay();
-  } catch {
-    currentInput = "Error";
-    shouldResetDisplay = true;
-    updateDisplay();
-  }
-}
-
-// Keyboard Support
-document.addEventListener("keydown", function (event) {
-  if (!isNaN(event.key) || "+-*/().".includes(event.key)) {
-    insert(event.key);
-  } else if (event.key === "Enter" || event.key === "=") {
-    event.preventDefault();
-    calculate();
-  } else if (event.key === "Backspace") {
-    event.preventDefault();
-    deleteLast();
-  } else if (event.key === "Escape" || event.key.toLowerCase() === "c") {
-    event.preventDefault();
-    clearDisplay();
-  }
+// Keyboard support
+document.addEventListener('keydown', function(event) {
+  const key = event.key;
+  
+  // Numbers and basic operators
+  if (key >= '0' && key <= '9') {
+    insert(key);
+  } else if (key === '.' || key === '+' || key === '-') {
+    insert(key);
+  } else if (key === '*') {
+    insert('×'); // Insert display symbol for multiplication
+  } else if (key === '/') {
+    event.preventDefault(); // Prevent browser shortcuts (like quick find)
+    insert('÷'); // Insert display symbol for division
+  } else if (key === '^') {
+    insert('^'); // Insert display symbol for power
+  } else if (key === 'Enter' || key === '=') {
+    event.preventDefault();
+    calculate();
+  } else if (key === 'Escape' || key === 'c' || key === 'C') {
+    clearDisplay();
+  } else if (key === 'Backspace') {
+    event.preventDefault();
+    deleteLast();
+  } else if (key === '(' || key === ')') {
+    insert(key);
+  }
+});
 });
 
 updateDisplay();
+
