@@ -1,123 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modern Dark Scientific Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-
-    /* Subtle button hover glow */
-    .calc-button:hover {
-      filter: brightness(1.2);
-      transform: scale(1.05);
-      transition: all 0.15s ease-in-out;
-    }
-
-    .calc-button:active {
-      transform: scale(0.98);
-      filter: brightness(0.9);
-    }
-
-    /* Thematic button colors */
-    .operator {
-      background-color: #334155; /* slate-700 */
-      color: #fbbf24; /* amber-400 */
-    }
-
-    .function {
-      background-color: #1e293b; /* slate-800 */
-      color: #38bdf8; /* sky-400 */
-    }
-
-    .equals {
-      background-color: #22c55e; /* green-500 */
-      color: white;
-    }
-
-    .clear {
-      background-color: #ef4444; /* red-500 */
-      color: white;
-    }
-
-    .calc-button {
-      background-color: #0f172a; /* slate-900 */
-      color: #e2e8f0; /* gray-200 */
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    }
-
-    .calc-button.operator:hover {
-      box-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
-    }
-
-    .calc-button.function:hover {
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
-    }
-
-    .equals:hover {
-      box-shadow: 0 0 12px rgba(34, 197, 94, 0.7);
-    }
-
-    .clear:hover {
-      box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top-Class Scientific Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-950 text-gray-100 min-h-screen flex items-center justify-center p-4 sm:p-6">
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+    <div class="calculator rounded-3xl p-5 sm:p-7 shadow-2xl w-full max-w-xs sm:max-w-md">
+        <div id="history-display" class="h-6 text-sm text-gray-500 text-right pr-2"></div>
+        
+        <input 
+            type="text" 
+            id="display" 
+            class="w-full h-16 sm:h-20 text-3xl sm:text-4xl text-right p-3 sm:p-4 rounded-xl mb-4 sm:mb-5 outline-none" 
+            readonly
+            value="0"
+        >
 
-  <div class="calculator bg-slate-900/70 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-[0_0_25px_rgba(0,0,0,0.5)] w-full max-w-xs sm:max-w-md border border-slate-800">
-    
-    <div id="history-display" class="h-6 text-xs sm:text-sm text-slate-400 text-right pr-2 mb-1"></div>
-    
-    <input
-      type="text"
-      id="display"
-      class="w-full h-16 sm:h-20 text-3xl sm:text-4xl text-right p-3 sm:p-4 rounded-xl mb-4 sm:mb-5 bg-slate-800/80 text-gray-50 outline-none border border-slate-700"
-      readonly
-      value="0"
-    />
+        <div class="grid grid-cols-4 gap-2 sm:gap-3">
+            
+            <button onclick="clearDisplay()" class="calc-button clear h-14 sm:h-16 rounded-xl font-bold text-lg">AC</button>
+            <button onclick="deleteLast()" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-lg"><span class="text-xl">⌫</span></button>
+            <button onclick="insert('(')" class="calc-button operator h-14 sm:h-16 rounded-xl font-bold text-lg">(</button>
+            <button onclick="insert(')')" class="calc-button operator h-14 sm:h-16 rounded-xl font-bold text-lg">)</button>
 
-    <div class="grid grid-cols-4 gap-2 sm:gap-3">
-      <button onclick="clearDisplay()" class="calc-button clear h-14 sm:h-16 rounded-xl font-semibold text-lg col-span-2">AC</button>
-      <button onclick="deleteLast()" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-lg"><span class="text-xl">⌫</span></button>
-      <button onclick="insert('(')" class="calc-button operator h-14 sm:h-16 rounded-xl font-semibold text-lg">(</button>
+            <button onclick="insertFunction('sin')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm">sin</button>
+            <button onclick="insertFunction('cos')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm">cos</button>
+            <button onclick="insertFunction('tan')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm">tan</button>
+            <button onclick="insert('/')" class="calc-button operator h-12 sm:h-14 rounded-xl font-bold text-2xl">÷</button>
+            
+            <button onclick="insertFunction('log')" class="calc-button function h-14 sm:h-16 rounded-xl text-sm">log</button>
+            <button onclick="insert('7')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">7</button>
+            <button onclick="insert('8')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">8</button>
+            <button onclick="insert('9')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">9</button>
+            <button onclick="insert('*')" class="calc-button operator h-14 sm:h-16 rounded-xl font-bold text-2xl">×</button>
+            
+            <button onclick="insert('^')" class="calc-button function h-14 sm:h-16 rounded-xl text-sm">x<sup class="text-xs">y</sup></button>
+            <button onclick="insert('4')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">4</button>
+            <button onclick="insert('5')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">5</button>
+            <button onclick="insert('6')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">6</button>
+            <button onclick="insert('-')" class="calc-button operator h-14 sm:h-16 rounded-xl font-bold text-2xl">−</button>
 
-      <button onclick="insertFunction('sin')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm font-semibold">sin</button>
-      <button onclick="insertFunction('cos')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm font-semibold">cos</button>
-      <button onclick="insertFunction('tan')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm font-semibold">tan</button>
-      <button onclick="insert(')')" class="calc-button operator h-12 sm:h-14 rounded-xl font-semibold text-lg">)</button>
+            <button onclick="insertFunction('sqrt')" class="calc-button function h-14 sm:h-16 rounded-xl text-sm">√</button>
+            <button onclick="insert('1')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">1</button>
+            <button onclick="insert('2')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">2</button>
+            <button onclick="insert('3')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">3</button>
+            <button onclick="insert('+')" class="calc-button operator h-14 sm:h-16 rounded-xl font-bold text-2xl">+</button>
 
-      <button onclick="insertConstant('pi')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm font-semibold">π</button>
-      <button onclick="insert('7')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">7</button>
-      <button onclick="insert('8')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">8</button>
-      <button onclick="insert('9')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">9</button>
-      <button onclick="insert('/')" class="calc-button operator h-14 sm:h-16 rounded-xl font-semibold text-2xl">÷</button>
-
-      <button onclick="insertFunction('sqrt')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm font-semibold">√</button>
-      <button onclick="insert('4')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">4</button>
-      <button onclick="insert('5')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">5</button>
-      <button onclick="insert('6')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">6</button>
-      <button onclick="insert('*')" class="calc-button operator h-14 sm:h-16 rounded-xl font-semibold text-2xl">×</button>
-
-      <button onclick="insert('^')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm font-semibold">x<sup class="text-xs">y</sup></button>
-      <button onclick="insert('1')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">1</button>
-      <button onclick="insert('2')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">2</button>
-      <button onclick="insert('3')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">3</button>
-      <button onclick="insert('-')" class="calc-button operator h-14 sm:h-16 rounded-xl font-semibold text-2xl">−</button>
-
-      <button onclick="insertFunction('log')" class="calc-button function h-12 sm:h-14 rounded-xl text-sm font-semibold">log</button>
-      <button onclick="insert('0')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">0</button>
-      <button onclick="insert('.')" class="calc-button h-14 sm:h-16 rounded-xl font-semibold text-xl">.</button>
-      <button onclick="calculate()" class="calc-button equals h-14 sm:h-16 rounded-xl font-semibold text-2xl col-span-2">=</button>
-      <button onclick="insert('+')" class="calc-button operator h-14 sm:h-16 rounded-xl font-semibold text-2xl">+</button>
+            <button onclick="insertConstant('pi')" class="calc-button function h-14 sm:h-16 rounded-xl text-sm">π</button>
+            <button onclick="insert('0')" class="calc-button h-14 sm:h-16 rounded-xl font-bold text-xl">0</button>
+            <button onclick="insertConstant('e')" class="calc-button function h-14 sm:h-16 rounded-xl text-sm">e</button>
+            <button onclick="calculate()" class="calc-button equals h-14 sm:h-16 rounded-xl font-bold text-2xl">=</button>
+        </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
-
+</html>
