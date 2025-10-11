@@ -3,26 +3,107 @@ body {
     box-sizing: border-box;
 }
 
-/* Button press animation */
-.button-press {
-    transform: scale(0.95);
+/* Calculator display glow */
+.display-glow {
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+    transition: box-shadow 0.3s ease-in-out, transform 0.2s;
 }
 
-/* Smooth theme transition */
+.dark .display-glow {
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.5);
+}
+
+/* Press animation for buttons */
+.button-press {
+    transform: scale(0.92);
+    transition: transform 0.1s ease-in-out;
+}
+
+/* Calculator buttons hover & focus */
+.calc-btn {
+    @apply h-16 rounded-xl font-semibold text-xl shadow-lg transform transition-all duration-200 ease-in-out focus:outline-none focus:ring-4;
+}
+
+/* Number buttons */
+.number-btn {
+    @apply bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 focus:ring-blue-300 dark:focus:ring-blue-600;
+}
+
+/* Operator buttons */
+.operator-btn {
+    @apply bg-gradient-to-br from-blue-500 to-blue-600 dark:from-green-600 dark:to-green-700 text-white hover:brightness-110 focus:ring-blue-400 dark:focus:ring-green-500;
+}
+
+/* Equals button */
+.equals-btn {
+    @apply bg-gradient-to-br from-orange-500 to-orange-600 dark:from-purple-600 dark:to-purple-700 text-white hover:brightness-110 focus:ring-orange-400 dark:focus:ring-purple-500;
+}
+
+/* Theme toggle button */
+#themeToggle svg {
+    transition: transform 0.3s ease-in-out;
+}
+
+#themeToggle:hover svg {
+    transform: rotate(20deg);
+}
+
+/* Display bounce animation when updated */
+@keyframes displayBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.scale-105 {
+    animation: displayBounce 0.2s ease-in-out;
+}
+
+/* Add subtle background gradient animation for calculator container */
 .theme-transition {
     transition: all 0.3s ease-in-out;
 }
 
-/* Display glow effect */
-.display-glow {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+/* Optional: Animate buttons with slight shadow on hover */
+.calc-btn:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.dark .display-glow {
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+/* Add a subtle glow to operator buttons */
+.operator-btn:hover {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
 }
 
-/* Calculator Buttons using Tailwind's @apply if using PostCSS, otherwise handled via Tailwind classes */
+.equals-btn:hover {
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.6);
+}
 
+/* Add rounded shadow for display text */
+#display {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode background gradient animation */
+body.dark {
+    background: linear-gradient(135deg, #1f2937, #111827);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Optional: Add blinking cursor effect on display for decimal input */
+.blinking-cursor::after {
+    content: "|";
+    animation: blink 1s step-start infinite;
+    color: #3b82f6;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
 
 
