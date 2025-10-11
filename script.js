@@ -135,7 +135,26 @@ class Calculator {
 
 // Initialize calculator
 new Calculator();
+// Theme toggle
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+const savedTheme = localStorage.getItem('theme') || 'light';
+html.classList.toggle('dark', savedTheme === 'dark');
+
+themeToggle.addEventListener('click', () => {
+    const isDark = html.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
+
+// Calculator Class
+class Calculator {
+    constructor() {
+        this.display = document.getElementById('display');
+        this.expression = document.getElementById('expression');
+        this.currentInput =
+
 
            
+
 
 
