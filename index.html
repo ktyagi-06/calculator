@@ -3,64 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Dynamic Calculator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Advanced Scientific Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-transition min-h-full bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-    <div class="w-full max-w-sm">
-        <!-- Theme Toggle -->
-        <div class="flex justify-end mb-4">
-            <button id="themeToggle" class="theme-transition p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95">
-                <svg id="sunIcon" class="w-6 h-6 text-yellow-500 dark:hidden" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
-                </svg>
-                <svg id="moonIcon" class="w-6 h-6 text-blue-400 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                </svg>
-            </button>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="switchMode('basic')">Basic</button>
+            <button class="mode-btn" onclick="switchMode('advanced')">Scientific</button>
+            <button class="mode-btn" onclick="switchMode('calculus')">Calculus</button>
         </div>
 
-        <!-- Calculator Container -->
-        <div class="theme-transition bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 border border-gray-200 dark:border-gray-700">
-            <!-- Display -->
-            <div class="theme-transition display-glow bg-gray-50 dark:bg-gray-900 rounded-2xl p-4 mb-6 border-2 border-blue-200 dark:border-green-500 flex flex-col">
-                <div id="expression" class="text-right text-gray-500 text-sm font-mono min-h-[1.2rem]"></div>
-                <div id="display" class="text-right text-4xl font-mono font-bold text-gray-800 dark:text-green-400 min-h-[3rem] flex items-center justify-end blinking-cursor">0</div>
+        <!-- Basic Calculator -->
+        <div class="mode-content active" id="basic-mode">
+            <div class="button-grid basic-grid">
+                <button class="btn clear" onclick="clearDisplay()">C</button>
+                <button class="btn clear" onclick="clearEntry()">CE</button>
+                <button class="btn operator" onclick="appendToDisplay('/')">/</button>
+                <button class="btn operator" onclick="appendToDisplay('*')">×</button>
+                
+                <button class="btn" onclick="appendToDisplay('7')">7</button>
+                <button class="btn" onclick="appendToDisplay('8')">8</button>
+                <button class="btn" onclick="appendToDisplay('9')">9</button>
+                <button class="btn operator" onclick="appendToDisplay('-')">-</button>
+                
+                <button class="btn" onclick="appendToDisplay('4')">4</button>
+                <button class="btn" onclick="appendToDisplay('5')">5</button>
+                <button class="btn" onclick="appendToDisplay('6')">6</button>
+                <button class="btn operator" onclick="appendToDisplay('+')">+</button>
+                
+                <button class="btn" onclick="appendToDisplay('1')">1</button>
+                <button class="btn" onclick="appendToDisplay('2')">2</button>
+                <button class="btn" onclick="appendToDisplay('3')">3</button>
+                <button class="btn equals" onclick="calculate()" rowspan="2">=</button>
+                
+                <button class="btn" onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+                <button class="btn" onclick="appendToDisplay('.')">.</button>
             </div>
+        </div>
 
-            <!-- Button Grid -->
-            <div class="grid grid-cols-4 gap-3">
-                <!-- First row -->
-                <button class="calc-btn operator-btn col-span-2" data-action="clear">AC</button>
-                <button class="calc-btn operator-btn" data-action="backspace">⌫</button>
-                <button class="calc-btn operator-btn" data-action="operator" data-operator="/">÷</button>
+        <!-- Scientific Calculator -->
+        <div class="mode-content" id="advanced-mode">
+            <div class="button-grid advanced-grid">
+                <button class="btn function" onclick="appendFunction('sin(')">sin</button>
+                <button class="btn function" onclick="appendFunction('cos(')">cos</button>
+                <button class="btn function" onclick="appendFunction('tan(')">tan</button>
+                <button class="btn function" onclick="appendFunction('log(')">log</button>
+                <button class="btn function" onclick="appendFunction('ln(')">ln</button>
+                
+                <button class="btn function" onclick="appendFunction('asin(')">asin</button>
+                <button class="btn function" onclick="appendFunction('acos(')">acos</button>
+                <button class="btn function" onclick="appendFunction('atan(')">atan</button>
+                <button class="btn function" onclick="appendToDisplay('Math.PI')">π</button>
+                <button class="btn function" onclick="appendToDisplay('Math.E')">e</button>
+                
+                <button class="btn function" onclick="appendFunction('sqrt(')">√</button>
+                <button class="btn function" onclick="appendToDisplay('^')">x^y</button>
+                <button class="btn function" onclick="appendToDisplay('!')">x!</button>
+                <button class="btn operator" onclick="appendToDisplay('(')">(</button>
+                <button class="btn operator" onclick="appendToDisplay(')')">)</button>
+                
+                <button class="btn" onclick="appendToDisplay('7')">7</button>
+                <button class="btn" onclick="appendToDisplay('8')">8</button>
+                <button class="btn" onclick="appendToDisplay('9')">9</button>
+                <button class="btn operator" onclick="appendToDisplay('/')">/</button>
+                <button class="btn clear" onclick="clearDisplay()">C</button>
+                
+                <button class="btn" onclick="appendToDisplay('4')">4</button>
+                <button class="btn" onclick="appendToDisplay('5')">5</button>
+                <button class="btn" onclick="appendToDisplay('6')">6</button>
+                <button class="btn operator" onclick="appendToDisplay('*')">×</button>
+                <button class="btn clear" onclick="clearEntry()">CE</button>
+                
+                <button class="btn" onclick="appendToDisplay('1')">1</button>
+                <button class="btn" onclick="appendToDisplay('2')">2</button>
+                <button class="btn" onclick="appendToDisplay('3')">3</button>
+                <button class="btn operator" onclick="appendToDisplay('-')">-</button>
+                <button class="btn equals" onclick="calculate()" rowspan="2">=</button>
+                
+                <button class="btn" onclick="appendToDisplay('0')">0</button>
+                <button class="btn" onclick="appendToDisplay('.')">.</button>
+                <button class="btn" onclick="appendToDisplay('x')">x</button>
+                <button class="btn operator" onclick="appendToDisplay('+')">+</button>
+            </div>
+        </div>
 
-                <!-- Numbers & operators -->
-                <button class="calc-btn number-btn" data-number="7">7</button>
-                <button class="calc-btn number-btn" data-number="8">8</button>
-                <button class="calc-btn number-btn" data-number="9">9</button>
-                <button class="calc-btn operator-btn" data-action="operator" data-operator="*">×</button>
-
-                <button class="calc-btn number-btn" data-number="4">4</button>
-                <button class="calc-btn number-btn" data-number="5">5</button>
-                <button class="calc-btn number-btn" data-number="6">6</button>
-                <button class="calc-btn operator-btn" data-action="operator" data-operator="-">-</button>
-
-                <button class="calc-btn number-btn" data-number="1">1</button>
-                <button class="calc-btn number-btn" data-number="2">2</button>
-                <button class="calc-btn number-btn" data-number="3">3</button>
-                <button class="calc-btn operator-btn" data-action="operator" data-operator="+">+</button>
-
-                <button class="calc-btn number-btn col-span-2" data-number="0">0</button>
-                <button class="calc-btn number-btn" data-action="decimal">.</button>
-                <button class="calc-btn equals-btn" data-action="equals">=</button>
-
-                <!-- Scientific buttons (optional) -->
-                <button class="calc-btn operator-btn" data-action="percent">%</button>
-                <button class="calc-btn operator-btn" data-action="square">x²</button>
-                <button class="calc-btn operator-btn" data-action="sqrt">√</button>
-                <button class="calc-btn operator-btn" data-action="toggle-sign">+/-</button>
+        <!-- Calculus Calculator -->
+        <div class="mode-content" id="calculus-mode">
+            <div class="calculus-input">
+                <label for="function-input">Function f(x):</label>
+                <input type="text" id="function-input" placeholder="e.g., x^2 + 3*x + 1" value="x^2">
+            </div>
+            
+            <div class="button-grid calculus-grid">
+                <button class="btn calculus" onclick="calculateDerivative()">d/dx</button>
+                <button class="btn calculus" onclick="calculateIntegral()">∫ dx</button>
+                <button class="btn calculus" onclick="calculateDefiniteIntegral()">∫[a,b] dx</button>
+                
+                <button class="btn calculus" onclick="evaluateFunction()">f(x) at x=</button>
+                <button class="btn calculus" onclick="findRoots()">Find Roots</button>
+                <button class="btn calculus" onclick="plotFunction()">Plot f(x)</button>
+            </div>
+            
+            <div class="calculus-input">
+                <label for="x-value">x value:</label>
+                <input type="number" id="x-value" placeholder="Enter x value" value="2">
+            </div>
+            
+            <div class="calculus-input" style="display: none;" id="integral-bounds">
+                <label for="lower-bound">Lower bound (a):</label>
+                <input type="number" id="lower-bound" placeholder="Lower bound" value="0">
+                <label for="upper-bound">Upper bound (b):</label>
+                <input type="number" id="upper-bound" placeholder="Upper bound" value="1">
             </div>
         </div>
     </div>
@@ -68,6 +124,7 @@
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
