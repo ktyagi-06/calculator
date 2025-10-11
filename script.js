@@ -1,18 +1,15 @@
 // Theme Toggle
 const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
-
-// Load saved theme
 const savedTheme = localStorage.getItem('theme') || 'light';
 html.classList.toggle('dark', savedTheme === 'dark');
 
-// Toggle theme on click
 themeToggle.addEventListener('click', () => {
     const isDark = html.classList.toggle('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
 });
 
-// Calculator Logic
+// Calculator
 class Calculator {
     constructor() {
         this.display = document.getElementById('display');
@@ -20,13 +17,14 @@ class Calculator {
         this.previousInput = '';
         this.operator = null;
         this.waitingForOperand = false;
+        this.blinking = true;
         this.setupEventListeners();
+        this.startCursorBlink();
     }
 
     setupEventListeners() {
         document.addEventListener('click', (e) => {
             if (!e.target.classList.contains('calc-btn')) return;
-
             e.target.classList.add('button-press');
             setTimeout(() => e.target.classList.remove('button-press'), 150);
 
@@ -49,18 +47,19 @@ class Calculator {
         });
     }
 
-    updateDisplay() {
-        this.display.textContent = this.formatNumber(this.currentInput);
-        this.display.classList.add('scale-105');
-        setTimeout(() => this.display.classList.remove('scale-105'), 100);
+    startCursorBlink() {
+        setInterval(() => {
+            if (!this.display.textContent.includes('|')) this.display.textContent += '|';
+            else this.display.textContent = this.display.textContent.replace('|', '');
+        }, 500);
     }
 
-    formatNumber(num) {
-        const number = parseFloat(num);
-        if (isNaN(number)) return '0';
-        if (Math.abs(number) > 999999999 || (Math.abs(number) < 0.000001 && number !== 0))
-            return number.toExponential(6);
-        return number.toString();
+    updateDisplay() {
+        let text = this.currentInput;
+        if (this.blinking && !text.includes('|')) text += '|';
+        this.display.textContent = text;
+        this.display.classList.add('scale-105');
+        setTimeout(() => this.display.classList.remove('scale-105'), 100);
     }
 
     inputNumber(num) {
@@ -93,16 +92,13 @@ class Calculator {
 
     toggleSign() {
         if (this.currentInput !== '0') {
-            this.currentInput = this.currentInput.startsWith('-') 
-                ? this.currentInput.slice(1) 
-                : '-' + this.currentInput;
+            this.currentInput = this.currentInput.startsWith('-') ? this.currentInput.slice(1) : '-' + this.currentInput;
             this.updateDisplay();
         }
     }
 
     inputOperator(nextOperator) {
         const inputValue = parseFloat(this.currentInput);
-
         if (this.previousInput === '') this.previousInput = inputValue;
         else if (this.operator) {
             const newValue = this.performCalculation(this.previousInput, inputValue, this.operator);
@@ -110,7 +106,6 @@ class Calculator {
             this.previousInput = newValue;
             this.updateDisplay();
         }
-
         this.waitingForOperand = true;
         this.operator = nextOperator;
     }
@@ -130,5 +125,17 @@ class Calculator {
     performCalculation(a, b, operator) {
         switch (operator) {
             case '+': return a + b;
+            case '-': return a - b;
+            case '*': return a * b;
+            case '/': return b !== 0 ? a / b : 0;
+            default: return b;
+        }
+    }
+}
+
+// Initialize calculator
+new Calculator();
+
            
+
 
