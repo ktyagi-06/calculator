@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Calculator</title>
+    <title>Advanced Dynamic Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,16 +24,19 @@
         <!-- Calculator Container -->
         <div class="theme-transition bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 border border-gray-200 dark:border-gray-700">
             <!-- Display -->
-            <div class="theme-transition display-glow bg-gray-50 dark:bg-gray-900 rounded-2xl p-6 mb-6 border-2 border-blue-200 dark:border-green-500">
-                <div id="display" class="text-right text-4xl font-mono font-bold text-gray-800 dark:text-green-400 min-h-[3rem] flex items-center justify-end overflow-hidden blinking-cursor">0</div>
+            <div class="theme-transition display-glow bg-gray-50 dark:bg-gray-900 rounded-2xl p-4 mb-6 border-2 border-blue-200 dark:border-green-500 flex flex-col">
+                <div id="expression" class="text-right text-gray-500 text-sm font-mono min-h-[1.2rem]"></div>
+                <div id="display" class="text-right text-4xl font-mono font-bold text-gray-800 dark:text-green-400 min-h-[3rem] flex items-center justify-end blinking-cursor">0</div>
             </div>
 
             <!-- Button Grid -->
             <div class="grid grid-cols-4 gap-3">
+                <!-- First row -->
                 <button class="calc-btn operator-btn col-span-2" data-action="clear">AC</button>
-                <button class="calc-btn operator-btn" data-action="toggle-sign">+/-</button>
+                <button class="calc-btn operator-btn" data-action="backspace">⌫</button>
                 <button class="calc-btn operator-btn" data-action="operator" data-operator="/">÷</button>
 
+                <!-- Numbers & operators -->
                 <button class="calc-btn number-btn" data-number="7">7</button>
                 <button class="calc-btn number-btn" data-number="8">8</button>
                 <button class="calc-btn number-btn" data-number="9">9</button>
@@ -52,6 +55,12 @@
                 <button class="calc-btn number-btn col-span-2" data-number="0">0</button>
                 <button class="calc-btn number-btn" data-action="decimal">.</button>
                 <button class="calc-btn equals-btn" data-action="equals">=</button>
+
+                <!-- Scientific buttons (optional) -->
+                <button class="calc-btn operator-btn" data-action="percent">%</button>
+                <button class="calc-btn operator-btn" data-action="square">x²</button>
+                <button class="calc-btn operator-btn" data-action="sqrt">√</button>
+                <button class="calc-btn operator-btn" data-action="toggle-sign">+/-</button>
             </div>
         </div>
     </div>
@@ -59,6 +68,8 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+
 
 
 
