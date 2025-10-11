@@ -83,19 +83,14 @@ body {
 }
 
 .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
-
 .btn.operator { background: #ff6b6b; color: white; }
 .btn.operator:hover { background: #ff5252; }
-
 .btn.function { background: #4ecdc4; color: white; }
 .btn.function:hover { background: #26a69a; }
-
 .btn.calculus { background: #9c27b0; color: white; }
 .btn.calculus:hover { background: #7b1fa2; }
-
 .btn.equals { background: #4caf50; color: white; }
 .btn.equals:hover { background: #43a047; }
-
 .btn.clear { background: #ff9800; color: white; }
 .btn.clear:hover { background: #f57c00; }
 
@@ -123,6 +118,7 @@ body {
     .btn { padding: 12px; font-size: 14px; }
     .display { font-size: 20px; padding: 15px; }
 }
+
 
 
 
