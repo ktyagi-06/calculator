@@ -1,128 +1,442 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Scientific Calculator</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="calculator">
-        <div class="display" id="display">0</div>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Calculator</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
         
-        <div class="mode-selector">
-            <button class="mode-btn active" onclick="switchMode('basic')">Basic</button>
-            <button class="mode-btn" onclick="switchMode('advanced')">Scientific</button>
-            <button class="mode-btn" onclick="switchMode('calculus')">Calculus</button>
-        </div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        <!-- Basic Calculator -->
-        <div class="mode-content active" id="basic-mode">
-            <div class="button-grid basic-grid">
-                <button class="btn clear" onclick="clearDisplay()">C</button>
-                <button class="btn clear" onclick="clearEntry()">CE</button>
-                <button class="btn operator" onclick="appendToDisplay('/')">/</button>
-                <button class="btn operator" onclick="appendToDisplay('*')">×</button>
-                
-                <button class="btn" onclick="appendToDisplay('7')">7</button>
-                <button class="btn" onclick="appendToDisplay('8')">8</button>
-                <button class="btn" onclick="appendToDisplay('9')">9</button>
-                <button class="btn operator" onclick="appendToDisplay('-')">-</button>
-                
-                <button class="btn" onclick="appendToDisplay('4')">4</button>
-                <button class="btn" onclick="appendToDisplay('5')">5</button>
-                <button class="btn" onclick="appendToDisplay('6')">6</button>
-                <button class="btn operator" onclick="appendToDisplay('+')">+</button>
-                
-                <button class="btn" onclick="appendToDisplay('1')">1</button>
-                <button class="btn" onclick="appendToDisplay('2')">2</button>
-                <button class="btn" onclick="appendToDisplay('3')">3</button>
-                <button class="btn equals" onclick="calculate()" rowspan="2">=</button>
-                
-                <button class="btn" onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
-                <button class="btn" onclick="appendToDisplay('.')">.</button>
-            </div>
-        </div>
+        .calculator {
+            min-height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-        <!-- Scientific Calculator -->
-        <div class="mode-content" id="advanced-mode">
-            <div class="button-grid advanced-grid">
-                <button class="btn function" onclick="appendFunction('sin(')">sin</button>
-                <button class="btn function" onclick="appendFunction('cos(')">cos</button>
-                <button class="btn function" onclick="appendFunction('tan(')">tan</button>
-                <button class="btn function" onclick="appendFunction('log(')">log</button>
-                <button class="btn function" onclick="appendFunction('ln(')">ln</button>
-                
-                <button class="btn function" onclick="appendFunction('asin(')">asin</button>
-                <button class="btn function" onclick="appendFunction('acos(')">acos</button>
-                <button class="btn function" onclick="appendFunction('atan(')">atan</button>
-                <button class="btn function" onclick="appendToDisplay('Math.PI')">π</button>
-                <button class="btn function" onclick="appendToDisplay('Math.E')">e</button>
-                
-                <button class="btn function" onclick="appendFunction('sqrt(')">√</button>
-                <button class="btn function" onclick="appendToDisplay('^')">x^y</button>
-                <button class="btn function" onclick="appendToDisplay('!')">x!</button>
-                <button class="btn operator" onclick="appendToDisplay('(')">(</button>
-                <button class="btn operator" onclick="appendToDisplay(')')">)</button>
-                
-                <button class="btn" onclick="appendToDisplay('7')">7</button>
-                <button class="btn" onclick="appendToDisplay('8')">8</button>
-                <button class="btn" onclick="appendToDisplay('9')">9</button>
-                <button class="btn operator" onclick="appendToDisplay('/')">/</button>
-                <button class="btn clear" onclick="clearDisplay()">C</button>
-                
-                <button class="btn" onclick="appendToDisplay('4')">4</button>
-                <button class="btn" onclick="appendToDisplay('5')">5</button>
-                <button class="btn" onclick="appendToDisplay('6')">6</button>
-                <button class="btn operator" onclick="appendToDisplay('*')">×</button>
-                <button class="btn clear" onclick="clearEntry()">CE</button>
-                
-                <button class="btn" onclick="appendToDisplay('1')">1</button>
-                <button class="btn" onclick="appendToDisplay('2')">2</button>
-                <button class="btn" onclick="appendToDisplay('3')">3</button>
-                <button class="btn operator" onclick="appendToDisplay('-')">-</button>
-                <button class="btn equals" onclick="calculate()" rowspan="2">=</button>
-                
-                <button class="btn" onclick="appendToDisplay('0')">0</button>
-                <button class="btn" onclick="appendToDisplay('.')">.</button>
-                <button class="btn" onclick="appendToDisplay('x')">x</button>
-                <button class="btn operator" onclick="appendToDisplay('+')">+</button>
-            </div>
-        </div>
+        .calculator-container {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
 
-        <!-- Calculus Calculator -->
-        <div class="mode-content" id="calculus-mode">
-            <div class="calculus-input">
-                <label for="function-input">Function f(x):</label>
-                <input type="text" id="function-input" placeholder="e.g., x^2 + 3*x + 1" value="x^2">
-            </div>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            background: var(--accent);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .display {
+            background: var(--bg-primary);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 2px solid var(--border);
+        }
+
+        .expression {
+            color: var(--text-secondary);
+            font-size: 16px;
+            min-height: 20px;
+            word-wrap: break-word;
+        }
+
+        .result {
+            color: var(--text-primary);
+            font-size: 32px;
+            font-weight: 600;
+            text-align: right;
+            min-height: 40px;
+            word-wrap: break-word;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-number {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-operator {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-function {
+            background: var(--secondary);
+            color: white;
+            font-size: 14px;
+        }
+
+        .btn-equals {
+            background: var(--accent);
+            color: white;
+            grid-column: span 2;
+        }
+
+        .btn-clear {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Light theme */
+        .light {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --primary: #3498db;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --border: #e9ecef;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Dark theme */
+        .dark {
+            --bg-primary: #2c3e50;
+            --bg-secondary: #34495e;
+            --text-primary: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --primary: #3498db;
+            --secondary: #9b59b6;
+            --accent: #e74c3c;
+            --border: #4a5568;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        @media (max-width: 600px) {
+            .calculator-container {
+                padding: 20px;
+                margin: 10px;
+            }
             
-            <div class="button-grid calculus-grid">
-                <button class="btn calculus" onclick="calculateDerivative()">d/dx</button>
-                <button class="btn calculus" onclick="calculateIntegral()">∫ dx</button>
-                <button class="btn calculus" onclick="calculateDefiniteIntegral()">∫[a,b] dx</button>
-                
-                <button class="btn calculus" onclick="evaluateFunction()">f(x) at x=</button>
-                <button class="btn calculus" onclick="findRoots()">Find Roots</button>
-                <button class="btn calculus" onclick="plotFunction()">Plot f(x)</button>
-            </div>
+            .btn {
+                padding: 15px;
+                font-size: 16px;
+                min-height: 50px;
+            }
             
-            <div class="calculus-input">
-                <label for="x-value">x value:</label>
-                <input type="number" id="x-value" placeholder="Enter x value" value="2">
-            </div>
-            
-            <div class="calculus-input" style="display: none;" id="integral-bounds">
-                <label for="lower-bound">Lower bound (a):</label>
-                <input type="number" id="lower-bound" placeholder="Lower bound" value="0">
-                <label for="upper-bound">Upper bound (b):</label>
-                <input type="number" id="upper-bound" placeholder="Upper bound" value="1">
-            </div>
-        </div>
+            .result {
+                font-size: 24px;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="calculator light" id="calculator">
+   <div class="calculator-container">
+    <div class="header">
+     <h1 class="title" id="calculatorTitle">Advanced Calculator</h1><button class="theme-toggle" id="themeToggle">Theme</button>
     </div>
+    <div class="display">
+     <div class="expression" id="expression"></div>
+     <div class="result" id="result">
+      0
+     </div>
+    </div>
+    <div class="button-grid"><button class="btn btn-clear" onclick="clearAll()">C</button> <button class="btn btn-clear" onclick="clearEntry()">CE</button> <button class="btn btn-function" onclick="addFunction('d/dx(')">d/dx</button> <button class="btn btn-function" onclick="addFunction('∫(')">∫dx</button> <button class="btn btn-operator" onclick="addOperator('/')">/</button> <button class="btn btn-function" onclick="addFunction('sin(')">sin</button> <button class="btn btn-function" onclick="addFunction('cos(')">cos</button> <button class="btn btn-function" onclick="addFunction('tan(')">tan</button> <button class="btn btn-function" onclick="addFunction('ln(')">ln</button> <button class="btn btn-operator" onclick="addOperator('*')">×</button> <button class="btn btn-function" onclick="addFunction('sqrt(')">√</button> <button class="btn btn-function" onclick="addOperator('^')">x^y</button> <button class="btn btn-function" onclick="addFunction('log(')">log</button> <button class="btn btn-number" onclick="addNumber('(')">(</button> <button class="btn btn-operator" onclick="addOperator('-')">-</button> <button class="btn btn-number" onclick="addNumber('7')">7</button> <button class="btn btn-number" onclick="addNumber('8')">8</button> <button class="btn btn-number" onclick="addNumber('9')">9</button> <button class="btn btn-number" onclick="addNumber(')')">)</button> <button class="btn btn-operator" onclick="addOperator('+')">+</button> <button class="btn btn-number" onclick="addNumber('4')">4</button> <button class="btn btn-number" onclick="addNumber('5')">5</button> <button class="btn btn-number" onclick="addNumber('6')">6</button> <button class="btn btn-function" onclick="addConstant('π')">π</button> <button class="btn btn-function" onclick="addConstant('e')">e</button> <button class="btn btn-number" onclick="addNumber('1')">1</button> <button class="btn btn-number" onclick="addNumber('2')">2</button> <button class="btn btn-number" onclick="addNumber('3')">3</button> <button class="btn btn-number" onclick="addNumber('x')">x</button> <button class="btn btn-number" onclick="addNumber('.')">.</button> <button class="btn btn-number" onclick="addNumber('0')" style="grid-column: span 2;">0</button> <button class="btn btn-operator" onclick="backspace()">⌫</button> <button class="btn btn-equals" onclick="calculate()">=</button>
+    </div>
+   </div>
+  </div>
+  <script>
+        let currentExpression = '';
+        let currentResult = '0';
+        let shouldResetDisplay = false;
 
-    <script src="script.js"></script>
-</body>
+        const defaultConfig = {
+            calculator_title: 'Advanced Calculator',
+            theme_label: 'Theme'
+        };
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig: defaultConfig,
+                render: async (config) => {
+                    const title = config.calculator_title || defaultConfig.calculator_title;
+                    const themeLabel = config.theme_label || defaultConfig.theme_label;
+                    
+                    document.getElementById('calculatorTitle').textContent = title;
+                    document.getElementById('themeToggle').textContent = themeLabel;
+                },
+                mapToCapabilities: (config) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ['calculator_title', config.calculator_title || defaultConfig.calculator_title],
+                    ['theme_label', config.theme_label || defaultConfig.theme_label]
+                ])
+            });
+        }
+
+        // Theme toggle functionality
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            const calculator = document.getElementById('calculator');
+            calculator.classList.toggle('light');
+            calculator.classList.toggle('dark');
+        });
+
+        function updateDisplay() {
+            document.getElementById('expression').textContent = currentExpression;
+            document.getElementById('result').textContent = currentResult;
+        }
+
+        function addNumber(num) {
+            if (shouldResetDisplay) {
+                currentExpression = '';
+                shouldResetDisplay = false;
+            }
+            currentExpression += num;
+            updateDisplay();
+        }
+
+        function addOperator(op) {
+            if (shouldResetDisplay) {
+                currentExpression = currentResult;
+                shouldResetDisplay = false;
+            }
+            currentExpression += op;
+            updateDisplay();
+        }
+
+        function addFunction(func) {
+            if (shouldResetDisplay) {
+                currentExpression = '';
+                shouldResetDisplay = false;
+            }
+            currentExpression += func;
+            updateDisplay();
+        }
+
+        function addConstant(constant) {
+            if (shouldResetDisplay) {
+                currentExpression = '';
+                shouldResetDisplay = false;
+            }
+            currentExpression += constant;
+            updateDisplay();
+        }
+
+        function clearAll() {
+            currentExpression = '';
+            currentResult = '0';
+            updateDisplay();
+        }
+
+        function clearEntry() {
+            currentResult = '0';
+            updateDisplay();
+        }
+
+        function backspace() {
+            if (currentExpression.length > 0) {
+                currentExpression = currentExpression.slice(0, -1);
+                updateDisplay();
+            }
+        }
+
+        function calculate() {
+            if (!currentExpression) return;
+
+            try {
+                let expression = currentExpression;
+                
+                // Handle calculus operations
+                if (expression.includes('d/dx(')) {
+                    currentResult = handleDerivative(expression);
+                } else if (expression.includes('∫(')) {
+                    currentResult = handleIntegral(expression);
+                } else {
+                    // Handle regular mathematical expressions
+                    expression = preprocessExpression(expression);
+                    currentResult = evaluateExpression(expression).toString();
+                }
+                
+                shouldResetDisplay = true;
+                updateDisplay();
+            } catch (error) {
+                currentResult = 'Error';
+                updateDisplay();
+            }
+        }
+
+        function preprocessExpression(expr) {
+            // Replace mathematical constants and functions
+            expr = expr.replace(/π/g, Math.PI);
+            expr = expr.replace(/e/g, Math.E);
+            expr = expr.replace(/sin\(/g, 'Math.sin(');
+            expr = expr.replace(/cos\(/g, 'Math.cos(');
+            expr = expr.replace(/tan\(/g, 'Math.tan(');
+            expr = expr.replace(/ln\(/g, 'Math.log(');
+            expr = expr.replace(/log\(/g, 'Math.log10(');
+            expr = expr.replace(/sqrt\(/g, 'Math.sqrt(');
+            expr = expr.replace(/\^/g, '**');
+            
+            return expr;
+        }
+
+        function evaluateExpression(expr) {
+            // Simple evaluation for basic arithmetic
+            // Note: In a production environment, you'd want a more secure evaluation method
+            return Function('"use strict"; return (' + expr + ')')();
+        }
+
+        function handleDerivative(expr) {
+            // Extract the function inside d/dx()
+            const match = expr.match(/d\/dx\(([^)]+)\)/);
+            if (!match) return 'Error';
+            
+            const func = match[1];
+            
+            // Simple symbolic differentiation for common functions
+            if (func === 'x') return '1';
+            if (func.match(/^x\^(\d+)$/)) {
+                const power = parseInt(func.match(/^x\^(\d+)$/)[1]);
+                return power === 2 ? '2x' : `${power}x^${power-1}`;
+            }
+            if (func === 'sin(x)') return 'cos(x)';
+            if (func === 'cos(x)') return '-sin(x)';
+            if (func === 'ln(x)') return '1/x';
+            if (func.match(/^\d+$/)) return '0'; // Constant
+            
+            return 'Derivative of ' + func;
+        }
+
+        function handleIntegral(expr) {
+            // Extract the function inside ∫()
+            const match = expr.match(/∫\(([^)]+)\)/);
+            if (!match) return 'Error';
+            
+            const func = match[1];
+            
+            // Simple symbolic integration for common functions
+            if (func === 'x') return 'x²/2 + C';
+            if (func === '1') return 'x + C';
+            if (func.match(/^x\^(\d+)$/)) {
+                const power = parseInt(func.match(/^x\^(\d+)$/)[1]);
+                return `x^${power+1}/${power+1} + C`;
+            }
+            if (func === 'sin(x)') return '-cos(x) + C';
+            if (func === 'cos(x)') return 'sin(x) + C';
+            if (func === '1/x') return 'ln|x| + C';
+            
+            return 'Integral of ' + func;
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            
+            if (key >= '0' && key <= '9') {
+                addNumber(key);
+            } else if (key === '.') {
+                addNumber('.');
+            } else if (key === '+') {
+                addOperator('+');
+            } else if (key === '-') {
+                addOperator('-');
+            } else if (key === '*') {
+                addOperator('*');
+            } else if (key === '/') {
+                event.preventDefault();
+                addOperator('/');
+            } else if (key === 'Enter' || key === '=') {
+                event.preventDefault();
+                calculate();
+            } else if (key === 'Escape') {
+                clearAll();
+            } else if (key === 'Backspace') {
+                backspace();
+            } else if (key === '(') {
+                addNumber('(');
+            } else if (key === ')') {
+                addNumber(')');
+            }
+        });
+
+        // Initialize display
+        updateDisplay();
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9918a7c434615a08',t:'MTc2MDk2NDc3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
 
 
